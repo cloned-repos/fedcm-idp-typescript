@@ -5,8 +5,6 @@
  */
 
 import { app } from '../app';
-import debug from 'debug';
-const log = debug('fedcm:server');
 import * as https from 'https';
 import * as tls from 'tls';
 import * as fs from 'fs';
@@ -139,5 +137,4 @@ function onError(error: { syscall: string; code: any }): void {
 function onListening() {
   var addr = server.address()
   var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port
-  debug('Listening on ' + bind)
 }

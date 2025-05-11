@@ -1,4 +1,4 @@
-import { browserSupportsWebAuthn, startRegistration, startAuthentication } from '@simplewebauthn\browser\esm\index.js';
+import { browserSupportsWebAuthn, startRegistration, startAuthentication } from '/@simplewebauthn/browser/esm/index.js';
 
 function startPassKeyProcess(type, form, errorDisplay) {
   console.log('submit-path0', path);
