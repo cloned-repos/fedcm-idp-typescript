@@ -2,6 +2,7 @@ const authorizeForm = document.getElementById('authorize-form')
 const rejectForm = document.getElementById('reject-form')
 
 function submit (form, path) {
+  console.log('submit-path2', path);
   const formData = new FormData(form)
   fetch(`${path}`, {
     method: 'POST',

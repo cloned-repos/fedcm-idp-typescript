@@ -5,11 +5,12 @@
   "scripts": {
     "clean": "rimraf dist",
     "start": "node ./dist/bin/www.js",
-    "start-local": "LOCALHOST=true PORT=8080 node ./dist/bin/www.js",
+    "start-local": "env LOCALHOST=true PORT=8080 node ./dist/bin/www.js",
     "build": "npm run clean && tsc && node copy-static.js",
-    "postinstall": "if [ \"$NODE_ENV\" = \"production\" ]; then npm run build; fi"
+    "postinstall": "bash ./postinstall.sh"
   },
   "dependencies": {
+    "@simplewebauthn/browser": "^13.1.0",
     "@simplewebauthn/server": "^7.3.1",
     "base64url": "^3.0.1",
     "bcrypt": "^5.1.0",
@@ -26,6 +27,7 @@
     "nodeman": "^1.1.2",
     "pouchdb": "^8.0.1",
     "pouchdb-find": "^8.0.1",
+    "tailwindcss": "^4.1.6",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

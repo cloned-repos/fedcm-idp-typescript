@@ -48,15 +48,15 @@ const userDataMiddleware = (req: Request, res: Response, next: NextFunction) => 
   const encryptedUserData = req.cookies.userSession;
 
   if (encryptedUserData) {
-      try {
-          const userData = decryptData(encryptedUserData);
-          req.session.loggedInUser = userData;
-      } catch (error) {
-          console.error('Error decrypting user data:', error);
-          req.session.loggedInUser = null;
-      }
-  } else {
+    try {
+      const userData = decryptData(encryptedUserData);
+      req.session.loggedInUser = userData;
+    } catch (error) {
+      console.error('Error decrypting user data:', error);
       req.session.loggedInUser = null;
+    }
+  } else {
+    req.session.loggedInUser = null;
   }
 
   next();
@@ -64,6 +64,7 @@ const userDataMiddleware = (req: Request, res: Response, next: NextFunction) => 
 
 // Set up middleware
 app.use(express.urlencoded({ extended: false }))
+app.use(express.static('dist'))
 
 // Middleware to parse cookies
 app.use(require('cookie-parser')());

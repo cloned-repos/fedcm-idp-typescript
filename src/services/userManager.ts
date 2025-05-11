@@ -36,6 +36,11 @@ export class UserManager {
     this.deviceDB = new PouchDB<SerializedAuthenticatorDevice>('devices');
   }
 
+  async getAllUsers() {
+    const result = await this.userDB.allDocs({ include_docs: true });
+    return result.rows.map(res => res.doc);
+  }
+
   /**
    * Retrieves a user object by email and hostname.
    * @param email {string} The email of the user.

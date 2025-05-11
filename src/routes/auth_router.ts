@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Router, Request, Response } from 'express';
 import { User } from '../services/user';
 import { SerializedAuthenticatorDevice } from '../services/userManager';
-import {  encryptData } from '../services/encryption';
+import { encryptData } from '../services/encryption';
 const base64url = require('base64url');
 
 export const authRouter = Router();
@@ -216,12 +216,12 @@ authRouter.post('/verify-registration', async (req, res) => {
 
     // Encrypt user data before storing in cookie
     const encryptedUser = encryptData(newUser);
-  
+
     // Set cookie with encrypted user data
     res.cookie('userSession', encryptedUser, {
-      httpOnly: true,   
-      secure: true,     
-      sameSite: 'none' 
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none'
     });
 
     // Set the expiration time for the login session
@@ -412,9 +412,9 @@ authRouter.post('/verify-authentication', async (req, res) => {
 
   // Set cookie with encrypted user data
   res.cookie('userSession', encryptedUser, {
-          httpOnly: true,   // Prevent client-side access
-          secure: true,     // Use HTTPS
-          sameSite: 'none' // Protect against CSRF
+    httpOnly: true,   // Prevent client-side access
+    secure: true,     // Use HTTPS
+    sameSite: 'none' // Protect against CSRF
   });
 
   // Set the expiration time for the login session
@@ -483,9 +483,9 @@ authRouter.post('/signup', async (req: Request, res: Response) => {
 
   // Set cookie with encrypted user data
   res.cookie('userSession', encryptedUser, {
-          httpOnly: true,   // Prevent client-side access
-          secure: true,     // Use HTTPS
-          sameSite: 'none' // Protect against CSRF
+    httpOnly: true,   // Prevent client-side access
+    secure: true,     // Use HTTPS
+    sameSite: 'none' // Protect against CSRF
   });
 
   // Set the expiration time for the login session
@@ -509,10 +509,12 @@ authRouter.post('/signup', async (req: Request, res: Response) => {
 authRouter.post('/signin', async (req: Request, res: Response) => {
   const { email, secret } = req.body
 
+  console.log(await req.userManager.getAllUsers());
+
   if (!email || !secret) {
     return res.status(400).send({ error: 'Email and password are required' })
   }
-
+  console.log('req.hostname', req.hostname, email)
   const user = await req.userManager.getUser(email, req.hostname)
 
   if (!user || user.secret !== secret) {
@@ -524,9 +526,9 @@ authRouter.post('/signin', async (req: Request, res: Response) => {
 
   // Set cookie with encrypted user data
   res.cookie('userSession', encryptedUser, {
-          httpOnly: true,   // Prevent client-side access
-          secure: true,     // Use HTTPS
-          sameSite: 'none' // Protect against CSRF
+    httpOnly: true,   // Prevent client-side access
+    secure: true,     // Use HTTPS
+    sameSite: 'none' // Protect against CSRF
   });
 
   // Set the expiration time for the login session
@@ -566,15 +568,15 @@ authRouter.post('/remove_client', async (req: Request, res: Response) => {
 
     // Get updated user 
     let updatedUser = await userManager.getUserByAccountID(accountId)
-      
+
     // Encrypt updated user data before storing in cookie
     const encryptedUser = encryptData(updatedUser);
 
     // Set cookie with encrypted user data
     res.cookie('userSession', encryptedUser, {
-           httpOnly: true,   // Prevent client-side access
-           secure: true,     // Use HTTPS
-           sameSite: 'none' // Protect against CSRF
+      httpOnly: true,   // Prevent client-side access
+      secure: true,     // Use HTTPS
+      sameSite: 'none' // Protect against CSRF
     });
   }
   res.redirect('/')

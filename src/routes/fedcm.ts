@@ -18,17 +18,28 @@ fedcmRouter.get('/client_metadata_endpoint', checkSecFetchDest, (req: Request, r
   const hostname = req.hostname
 
   // Check if the hostname is in the list of supportedIDPOrigins
+  // this is validated out of bounds
+  // 
   if (req.supportedIDPOrigins.includes(hostname)) {
+    // what? I am actually supposed to return this
+
     return res.json({
       privacy_policy_url: `https://${hostname}/privacy_policy.html`,
       terms_of_service_url: `https://${hostname}/terms_of_service.html`
     })
   } else {
     // Handle the case when the hostname is not in the supportedIDPOrigins list
-    return res.status(400).send('Unsupported hostname')
+    return res.status(400).send('Unsupported hostname');
   }
 })
 
+/* https://www.w3.org/TR/fedcm/#idp-api-accounts-endpoint
+GET /accounts_list HTTP/1.1
+Host: idp.example
+Accept: application/json
+Cookie: 0x23223
+Sec-Fetch-Dest: webidentity
+*/
 /**
  * Accounts endpoint. 
  * @see https://fedidcg.github.io/FedCM/#idp-api-accounts-endpoint
@@ -36,8 +47,13 @@ fedcmRouter.get('/client_metadata_endpoint', checkSecFetchDest, (req: Request, r
  */
 fedcmRouter.get('/accounts_endpoint', checkSecFetchDest, (req: Request, res: Response) => {
 
+  // cookie name is "fedcm-idp-session", but could be anything, this are first party cookies
+  // and only be shared when browser is calling idp endpoints
+  console.log('req.session', req.session);
+
   // respond with 401 if no user is logged in
   if (!req.session.loggedInUser) {
+
     return res.sendStatus(401);
   }
 
@@ -95,7 +111,7 @@ fedcmRouter.post('/token_endpoint', checkSecFetchDest, async (req: Request, res:
   }
 
   // Set CORS header after checks
-  
+
   res.set('Access-Control-Allow-Origin', req.get('Origin')); // Replace * with the specific origin you want to allow
   res.set('Access-Control-Allow-Credentials', 'true')
 
@@ -112,15 +128,15 @@ fedcmRouter.post('/token_endpoint', checkSecFetchDest, async (req: Request, res:
 
       // Get updated user 
       let updatedUser = await userManager.getUserByAccountID(account_id_session)
-      
+
       // Encrypt updated user data before storing in cookie
       const encryptedUser = encryptData(updatedUser);
 
       // Set cookie with encrypted user data
       res.cookie('userSession', encryptedUser, {
-          httpOnly: true,   // Prevent client-side access
-          secure: true,     // Use HTTPS
-          sameSite: 'none' // Protect against CSRF
+        httpOnly: true,   // Prevent client-side access
+        secure: true,     // Use HTTPS
+        sameSite: 'none' // Protect against CSRF
       });
     }
   }

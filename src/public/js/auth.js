@@ -1,7 +1,7 @@
-const { browserSupportsWebAuthn, startRegistration, startAuthentication } =
-  SimpleWebAuthnBrowser
+import { browserSupportsWebAuthn, startRegistration, startAuthentication } from '@simplewebauthn\browser\esm\index.js';
 
-function startPassKeyProcess (type, form, errorDisplay) {
+function startPassKeyProcess(type, form, errorDisplay) {
+  console.log('submit-path0', path);
   const formData = new FormData(form)
   let path
 
@@ -39,7 +39,7 @@ function startPassKeyProcess (type, form, errorDisplay) {
     .catch(err => handleError(err, errorDisplay))
 }
 
-function verifyPassKey (type, attResp) {
+function verifyPassKey(type, attResp) {
   let path
   if (type === 'authentication') {
     path = '/api/auth/verify-authentication'
@@ -62,7 +62,8 @@ function verifyPassKey (type, attResp) {
     })
 }
 
-function submitForm (form, path, errorMessage) {
+function submitForm(form, path, errorMessage) {
+  console.log('submit-path1', path);
   const formData = new FormData(form)
   fetch(`${path}`, {
     method: 'POST',
@@ -79,17 +80,17 @@ function submitForm (form, path, errorMessage) {
     .catch(err => handleError(err, errorMessage))
 }
 
-function handleSuccess () {
+function handleSuccess() {
   // In case were in a FedCM iFrame  - close it
   if (window.IdentityProvider && IdentityProvider.close) {
     try {
       IdentityProvider.close()
-    } catch (e) {}
+    } catch (e) { }
   }
   location.reload()
 }
 
-function handleError (error, errorDisplay) {
+function handleError(error, errorDisplay) {
   // Ignore these errors as they are expected
   if (
     error.name &&
@@ -103,7 +104,7 @@ function handleError (error, errorDisplay) {
   }
 }
 
-function toggleCreateAccount () {
+function toggleCreateAccount() {
   const createAccountContainer = document.getElementById(
     'create-account-container'
   )
@@ -117,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const signupErrorMessage = document.getElementById('signup-error-message')
   const passkeyButton = document.getElementById('passkey-button')
 
-  if (!browserSupportsWebAuthn()) {
+  if (browserSupportsWebAuthn && !browserSupportsWebAuthn()) {
     passkeyButton.style.display = 'none'
   }
 
@@ -147,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   authenticateOnLoad()
 
-  function authenticateOnLoad () {
+  function authenticateOnLoad() {
     fetch('/api/auth/generate-authentication-options', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' }

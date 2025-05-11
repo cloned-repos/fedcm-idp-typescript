@@ -6,12 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In & Create Account | <%= req.hostname %>
     </title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script>
+    <!--link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet"-->
+    <link href="tailwindcss/dist/index.css" rel="stylesheet">
+    <!-- script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"--></script>
     <script src="/js/auth.js"></script>
 </head>
 
-<header class="title-bar bg-gray-500 text-white py-4 shadow-md w-full fixed top-0 left-0">
+<header class="bg-gray-500 text-white py-4 shadow-md w-full fixed top-0 left-0">
     <div class="container mx-auto flex justify-between items-center">
         <h1 class="site-title text-2xl font-semibold px-4">Sample IDP - <%= req.hostname %>
         </h1>
